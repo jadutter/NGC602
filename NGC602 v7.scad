@@ -457,35 +457,36 @@ module test(x,y,z){
 }
 
 module bits(I){
-Star_scale=7;
+Star_scale=5;
 obj_scale=10;
+modifier=1;
 	if(I==1){
-		translate([transX,transY,base_boundaries[2]/2/scaling]){
+		translate([transX,transY,base_boundaries[2]/2]){
 			scale([scaling,scaling,1]){
 				for(i=[0:48]){
-					color("cyan")object(Standard,filaments[i][0],filaments[i][1],scale_object(filaments[i][6],obj_scale));
+					color("cyan")object(Standard,filaments[i][0],filaments[i][1],scale_object(filaments[i][6],obj_scale)-modifier*obj_scale);
 		
 				}
 			}
 		}
 	}
 	if(I==2){
-		translate([transX,transY,base_boundaries[2]/2/scaling]){
+		translate([transX,transY,base_boundaries[2]/2]){
 			scale([scaling,scaling,1]){
 				for(i=[0:69]){
-					color("Red")object(Standard,gasses[i][0],gasses[i][1],scale_object(gasses[i][3],obj_scale));
+					color("Red")object(Standard,gasses[i][0],gasses[i][1],scale_object(gasses[i][3],obj_scale)-modifier*obj_scale);
 				}
 				for(i=[0:62]){
-					color("Green")object(Standard,dust[i][0],dust[i][1],scale_object(dust[i][3],obj_scale));
+					color("Green")object(Standard,dust[i][0],dust[i][1],scale_object(dust[i][3],obj_scale)-modifier*obj_scale);
 				}
 				for(i=[0:29]){
-					color("Blue")object(Standard,gas_dust[i][0],gas_dust[i][1],scale_object(gas_dust[i][3],obj_scale));
+					color("Blue")object(Standard,gas_dust[i][0],gas_dust[i][1],scale_object(gas_dust[i][3],obj_scale)-modifier*obj_scale);
 				}
 			}
 		}
 	}
 	if(I==3){
-		translate([transX,transY,base_boundaries[2]/2/scaling]){
+		translate([transX,transY,base_boundaries[2]/2]){
 			scale([scaling,scaling,1]){
 				for(i=[0:69]){
 					color("Red")object(Standard,gasses[i][0],gasses[i][1],scale_object(gasses[i][4],obj_scale));
@@ -505,16 +506,16 @@ obj_scale=10;
 		}
 	}
 	if(I==4){
-		translate([transX,transY,base_boundaries[2]/2/scaling]){
+		translate([transX,transY,base_boundaries[2]/2]){
 			scale([scaling,scaling,1]){
 				for(i=[0:69]){
-					color("Red")object(Standard,gasses[i][0],gasses[i][1],scale_object(gasses[i][5],obj_scale));
+					color("Red")object(Standard,gasses[i][0],gasses[i][1],scale_object(gasses[i][5],obj_scale)-modifier*obj_scale);
 				}
 				for(i=[0:62]){
-					color("Green")object(Standard,dust[i][0],dust[i][1],scale_object(dust[i][5],obj_scale));
+					color("Green")object(Standard,dust[i][0],dust[i][1],scale_object(dust[i][5],obj_scale)-modifier*obj_scale);
 				}
 				for(i=[0:29]){
-					color("Blue")object(Standard,gas_dust[i][0],gas_dust[i][1],scale_object(gas_dust[i][5],obj_scale));
+					color("Blue")object(Standard,gas_dust[i][0],gas_dust[i][1],scale_object(gas_dust[i][5],obj_scale)-modifier*obj_scale);
 				}
 				for(i=[0:49]){
 					if(star[i][2]==4){
