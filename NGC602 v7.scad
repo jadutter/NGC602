@@ -1,6 +1,6 @@
 use <braille_font.scad>;
-use <Data.scad>;
-fn = 30;
+use <Patterns.scad>;
+fn = 5;
 pillar_diameter = 6.35;
 pillar_radius = pillar_diameter/2;
 pillar_height = 70;
@@ -20,11 +20,12 @@ Emboss = 2;
 scaling = (.95);
 transX = (2);
 transY = (2);
+transY_draw = (-18);
 
-move = -90.230965;
+move = 17.687;
 inkscale = 2.538071037;
 
-function scale_object(x,y) = log(x)*y;
+function scale_object(x) = (x)/15;
 
 star =
 [
@@ -323,13 +324,11 @@ r = s;
 Standard = 5;
 //X-cord,Y-cord,Layer,Intensity
 
-module star(Standard,Intensity,loc){
+module star(Standard,Intensity,loc,pointiness,fragments){
 Intensity2=Intensity;
-pointiness=0;
-//pointiness=Standard/2;
 	translate([loc[0],loc[1],0]){
 		scale([1,1,1]){
-			color("Purple")cylinder(r1=Standard/2,r2=pointiness,h=Intensity2,$fn=fn);
+			color("Purple")cylinder(r1=Standard/2,r2=pointiness,h=Intensity2,$fn=fragments);
 		}
 	}
 }
@@ -352,10 +351,17 @@ pointiness=0;
 //	}
 //}
 
-module object(Standard,x,y,z){
-	translate([x,y,z/2]){
+module object(type,Standard,x,y,z){
+	if(type==0){
+		translate([x,y,z/2]){
+			scale([1,1,1]){
+				cube([Standard,Standard,z],center=true);
+			}
+		}
+	}
+	translate([x,y,0]){
 		scale([1,1,1]){
-			cube([Standard,Standard,z],center=true);
+			cylinder(r=Standard/2,h=z,$fn=type);
 		}
 	}
 }
@@ -369,77 +375,51 @@ H=120/2/h;
 		scale(scaling/.95){
 			translate([0,move,base_boundaries[2]/2]){
 				scale(inkscale){
-					color("Blue")linear_extrude(file = "v5_NGC_602.dxf", height = Emboss, layer = "Filaments");
+					color("White")linear_extrude(file = "v6_NGC_602.dxf", height = Emboss, layer = "Filaments");
 				}
 			}
 		}
 	}
-	if(i==2||i==3||i==4){
-		//intersection(){
-			scale(scaling/.95){
-				translate([0,move,base_boundaries[2]/2]){
-					scale(inkscale){
-						color("Red")linear_extrude(file = "v5_NGC_602.dxf", height =(Emboss)/inkscale/.95, layer = "Gasses_t");
-					}
+
+	if(i==2||i==4){
+		scale(scaling/.95){
+			translate([0,move,base_boundaries[2]/2]){
+				scale(inkscale){
+					color("Red")linear_extrude(file = "v6_NGC_602.dxf", height =(Emboss*3)/inkscale/.95, layer = "Gasses_t");
 				}
 			}
-//			for(i=[0:H]){
-//				translate([i*2*h,0,0]){
-//					for(i=[0:H]){
-//						translate([0,i*2*h,base_boundaries[2]/2]){
-//							triangle(h,(Emboss*3));
-//						}
-//					}
-//				}
-//			}
-//
-//		}
-		//intersection(){
-			scale(scaling/.95){
-				translate([0,move,base_boundaries[2]/2/.95]){
-					scale(inkscale){
-						color("green")linear_extrude(file = "v5_NGC_602.dxf", height = (Emboss*3)/inkscale/.95, layer = "Dust_t");
-					}
+		}
+		scale(scaling/.95){
+			translate([0,move,base_boundaries[2]/2]){
+				scale(inkscale){
+					color("Green")linear_extrude(file = "v6_NGC_602.dxf", height = (Emboss*1)/inkscale/.95, layer = "Dust_t");
 				}
 			}
-//			for(i=[0:K]){
-//				translate([0,i*2*k,base_boundaries[2]/2]){
-//					cube([120,k,(Emboss*3)]);
-//				}
-//			}
-//		}
-		//intersection(){
-			scale(scaling/.95){
-				translate([0,17.687,base_boundaries[2]/2]){
-					scale(inkscale){
-						color("Blue")linear_extrude(file = "v5_NGC_602.dxf", height = (Emboss*2)/inkscale, layer = "Gas_Dust_t");
-					}
+		}
+		scale(scaling/.95){
+			translate([0,17.687,base_boundaries[2]/2]){
+				scale(inkscale){
+					color("Blue")linear_extrude(file = "v6_NGC_602.dxf", height = (Emboss*2)/inkscale, layer = "Gas_Dust_t");
 				}
 			}
-//			for(i=[0:K]){
-//				translate([i*2*k,0,base_boundaries[2]/2]){
-//					cube([k,120,Emboss*3]);
-//				}
-//			}
-//		}
+		}
 	}
 }
 module test(x,y,z){
 	if(x==1){
-//	difference(){
 		scale(scaling/.95){
 			translate([0,move,base_boundaries[2]/2/scaling]){
 				scale(inkscale){
-					color("Red")linear_extrude(file = "v5_NGC_602.dxf", height =(Emboss)/inkscale/.95, layer = "Gasses");
+					color("Red")linear_extrude(file = "v6_NGC_602.dxf", height =(Emboss)/inkscale/.95, layer = "Gasses_t");
 				}
 			}
 		}
 	}
 	if(y==1){
 		scale(scaling/.95){
-			translate([0,17.687,base_boundaries[2]/scaling]){
+			translate([0,17.687,base_boundaries[2]/2/scaling]){
 				scale(inkscale){
-					color("Blue")linear_extrude(file = "v5_NGC_602.dxf", height = (Emboss*2)/inkscale, layer = "Gas_Dust");
+					color("Blue")linear_extrude(file = "v6_NGC_602.dxf", height = (Emboss*2)/inkscale, layer = "Gas_Dust_t");
 				}
 			}
 		}
@@ -449,7 +429,7 @@ module test(x,y,z){
 		scale(scaling/.95){
 			translate([0,move,base_boundaries[2]/2/scaling]){
 				scale(inkscale){
-					color("green")linear_extrude(file = "v5_NGC_602.dxf", height = (Emboss*3)/inkscale/.95, layer = "Dust");
+					color("green")linear_extrude(file = "v6_NGC_602.dxf", height = (Emboss*3)/inkscale/.95, layer = "Dust_t");
 				}
 			}
 		}
@@ -457,69 +437,70 @@ module test(x,y,z){
 }
 
 module bits(I){
-Star_scale=5;
-obj_scale=10;
-modifier=1;
+
 	if(I==1){
 		translate([transX,transY,base_boundaries[2]/2]){
 			scale([scaling,scaling,1]){
 				for(i=[0:48]){
-					color("cyan")object(Standard,filaments[i][0],filaments[i][1],scale_object(filaments[i][6],obj_scale)-modifier*obj_scale);
+					color("cyan")object(0,Standard,filaments[i][0],filaments[i][1],scale_object(filaments[i][6],10)-1*10);
 		
 				}
 			}
 		}
 	}
+
 	if(I==2){
 		translate([transX,transY,base_boundaries[2]/2]){
 			scale([scaling,scaling,1]){
 				for(i=[0:69]){
-					color("Red")object(Standard,gasses[i][0],gasses[i][1],scale_object(gasses[i][3],obj_scale)-modifier*obj_scale);
+					color("Red")object(0,Standard,gasses[i][0],gasses[i][1],scale_object(gasses[i][3]));
 				}
 				for(i=[0:62]){
-					color("Green")object(Standard,dust[i][0],dust[i][1],scale_object(dust[i][3],obj_scale)-modifier*obj_scale);
+					color("Green")object(3,Standard,dust[i][0],dust[i][1],scale_object(dust[i][3],10));
 				}
 				for(i=[0:29]){
-					color("Blue")object(Standard,gas_dust[i][0],gas_dust[i][1],scale_object(gas_dust[i][3],obj_scale)-modifier*obj_scale);
+					color("Blue")object(30,Standard,gas_dust[i][0],gas_dust[i][1],scale_object(gas_dust[i][3]));
 				}
 			}
 		}
 	}
+
 	if(I==3){
 		translate([transX,transY,base_boundaries[2]/2]){
 			scale([scaling,scaling,1]){
 				for(i=[0:69]){
-					color("Red")object(Standard,gasses[i][0],gasses[i][1],scale_object(gasses[i][4],obj_scale));
+					color("Red")object(0,Standard,gasses[i][0],gasses[i][1],scale_object(gasses[i][4]));
 				}
 				for(i=[0:62]){
-					color("Green")object(Standard,dust[i][0],dust[i][1],scale_object(dust[i][4],obj_scale));
+					color("Green")object(3,Standard,dust[i][0],dust[i][1],scale_object(dust[i][4]));
 				}
 				for(i=[0:29]){
-					color("Blue")object(Standard,gas_dust[i][0],gas_dust[i][1],scale_object(gas_dust[i][4],obj_scale));
+					color("Blue")object(30,Standard,gas_dust[i][0],gas_dust[i][1],scale_object(gas_dust[i][4]));
 				}
 				for(i=[0:49]){
 					if(star[i][2]==3){
-						star(Standard,scale_object(star[i][3],Star_scale),star[i]);
+						star(Standard,log(star[i][3])*5,star[i],1,30);
 					}
 				}
 			}
 		}
 	}
+
 	if(I==4){
 		translate([transX,transY,base_boundaries[2]/2]){
 			scale([scaling,scaling,1]){
 				for(i=[0:69]){
-					color("Red")object(Standard,gasses[i][0],gasses[i][1],scale_object(gasses[i][5],obj_scale)-modifier*obj_scale);
+					color("Red")object(0,Standard,gasses[i][0],gasses[i][1],scale_object(gasses[i][5],10));
 				}
 				for(i=[0:62]){
-					color("Green")object(Standard,dust[i][0],dust[i][1],scale_object(dust[i][5],obj_scale)-modifier*obj_scale);
+					color("Green")object(3,Standard,dust[i][0],dust[i][1],scale_object(dust[i][5],10));
 				}
 				for(i=[0:29]){
-					color("Blue")object(Standard,gas_dust[i][0],gas_dust[i][1],scale_object(gas_dust[i][5],obj_scale)-modifier*obj_scale);
+					color("Blue")object(30,Standard,gas_dust[i][0],gas_dust[i][1],scale_object(gas_dust[i][5],10));
 				}
 				for(i=[0:49]){
 					if(star[i][2]==4){
-						star(Standard,scale_object(star[i][3],Star_scale),star[i]);
+						star(Standard,log(star[i][3])*5,star[i],1,30);
 					}
 				}
 			}
@@ -600,7 +581,7 @@ module plate(){
 	}
 }
 
-module plate1(){
+module plate1(type){
 	chars = ["O", "N", "E"];
 	char_count = 3;
 	Total_width = distance*char_count+distance;
@@ -610,15 +591,21 @@ module plate1(){
 			braille_str(chars, char_count);
 		}
 	}
+
 	plate();
 
-	bits(1);
+	if(type==0){
+		bits(1);
+	}
 
-	//drawing(1);
-
+	if(type==1){
+		translate([transX,transY_draw,0]){
+			drawing(1);
+		}
+	}
 }
 
-module plate2(){
+module plate2(type){
 	chars = ["T", "W", "O"];
 	char_count = 3;
 	Total_width = distance*char_count+distance;
@@ -628,15 +615,21 @@ module plate2(){
 			braille_str(chars, char_count);
 		}
 	}
+
 	plate();
 
-	bits(2);
+	if(type==0){
+		bits(2);
+	}
 
-	//drawing(2);
-
+	if(type==1){
+		translate([transX,transY_draw,0]){
+			drawing(2);
+		}
+	}
 }
 
-module plate3(){
+module plate3(type){
 	chars = ["T", "H", "R", "E", "E"];
 	char_count = 5;
 	Total_width = distance*char_count+distance;
@@ -646,26 +639,30 @@ module plate3(){
 			braille_str(chars, char_count);
 		}
 	}
+
 	plate();
 
-	bits(3);
+	if(type==0){
+		bits(3);
+	}
 
-	translate([transX,transY,0]){
-		scale([scaling,scaling,1]){
-			for(i=[0:49]){
-				if(star[i][2]==3){
-//					star(Standard,scale_object(star[i][3]),star[i]);
+	if(type==1){
+		translate([transX,transY,0]){
+			scale([scaling,scaling,1]){
+				for(i=[0:49]){
+					if(star[i][2]==3){
+						star(Standard,log(star[i][3])*5,star[i],Standard/2);
+					}
 				}
 			}
 		}
-
+		translate([transX,transY_draw,base_boundaries[2]/2]){
+			drawing(3);
+		}
 	}
-
-	//drawing(3);
-
 }
 
-module plate4(){
+module plate4(type){
 	chars = ["F", "O", "U", "R"];
 	char_count = 4;
 	Total_width = distance*char_count+distance;
@@ -675,84 +672,125 @@ module plate4(){
 			braille_str(chars, char_count);
 		}
 	}
+
 	plate();
 
-	bits(4);
-
-	translate([transX,transY,0]){
-		scale([scaling,scaling,1]){
-			for(i=[0:49]){
-				if(star[i][2]==4){
-//					star(Standard,scale_object(star[i][3]),star[i]);
+	if(type==0){
+		bits(4);
+	}
+	if(type==1){
+		translate([transX,transY,base_boundaries[2]/2]){
+			scale([scaling,scaling,1]){
+				for(i=[0:49]){
+					if(star[i][2]==4){
+						star(Standard,log(star[i][3])*5,star[i],Standard/2);
+					}
 				}
 			}
 		}
-	//drawing(4);
+		translate([transX,transY_draw,0]){
+			drawing(4);
+		}
 	}
 }
 
 
 
 
-module assembly(i){
+module assembly(i,type){
 //	%cube(base_boundaries);
 
 	base();
 
 	translate([0,0,(base_boundaries[2]+i)]){
-		plate4();
+		plate4(type);
 	}
 	translate([0,0,(base_boundaries[2]+i)*2]){
-		plate3();
+		plate3(type);
 	}
 	translate([0,0,(base_boundaries[2]+i)*3]){
-		plate2();
+		plate2(type);
 	}
 	translate([0,0,(base_boundaries[2]+i)*4]){
-		plate1();
+		plate1(type);
 	}
 
 
 }
 
-module assembly2(j){
+module assembly2(j,type){
 	for(i=[0:4]){
 		translate([(base_boundaries[0]*i+j*i),0,0]){
 			if(i==0){
 				base();
 			}
 			if(i==1){
-				plate1();
+				plate1(type);
 			}
 			if(i==2){
-				plate2();
+				plate2(type);
 			}
 			if(i==3){
-				plate3();
+				plate3(type);
 			}
 			if(i==4){
-				plate4();
+				plate4(type);
 			}
 		}
 	}
 }
 
-//test(1,0,1);
+module assembly3(j){
+	for(i=[0:3]){
+		translate([(base_boundaries[0]*i+j*i),base_boundaries[1]+j,0]){
+			if(i==0){
+				plate1(1);
+			}
+			if(i==1){
+				plate2(1);
+			}
+			if(i==2){
+				plate3(1);
+			}
+			if(i==3){
+				plate4(1);
+			}
+		}
+	}
+	for(i=[0:3]){
+		translate([(base_boundaries[0]*i+j*i),0,0]){
+			if(i==0){
+				plate1(0);
+			}
+			if(i==1){
+				plate2(0);
+			}
+			if(i==2){
+				plate3(0);
+			}
+			if(i==3){
+				plate4(0);
+			}
+		}
+	}
+}
+
+test(1,1,1);
 
 //cube(.1);
 
-assembly(90);
+//assembly(45,0);
 
-//assembly2(10);
+//assembly2(10,0);
 
+//assembly3(10,1);
 
-//plate3();
+//rotate([0,0,90]){
+//	translate([-base_boundaries[0]/2,-base_boundaries[1]/2,0]){
+//		plate4(1);
+//	}
+//}
 
-//%drawing(3);
-
-
-
-//
-//%color("Blue")object(10,0,0,20);
-//star(10,20,[0,0]);
-
+//pattern(X,Y,pat,x,y,shape,side,h);
+//pattern(100,120,0,0,1,2,1,1);
+pattern(100,120,0,1,1,0,1,1);
