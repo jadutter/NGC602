@@ -3,7 +3,7 @@ use <braille_font.scad>;
 fn = 30;
 pillar_diameter = 6.35;
 pillar_radius = pillar_diameter/2;
-pillar_height = 70;
+pillar_height = 100;
 base_boundaries = ([100,120,5]);
 Title = 10;
 max_plate_height = base_boundaries[2];
@@ -810,7 +810,7 @@ module assembly3(j){
 
 rotate([0,0,90]){
 	translate([-base_boundaries[0]/2,-base_boundaries[1]/2,0]){
-		plate1(1);
+		plate4(1);
 	}
 }
 
