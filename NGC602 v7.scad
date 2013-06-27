@@ -1,5 +1,4 @@
 use <braille_font.scad>;
-//use <Patterns.scad>;
 fn = 30;
 pillar_diameter = 6.35;
 pillar_radius = pillar_diameter/2;
@@ -8,6 +7,7 @@ base_boundaries = ([100,120,5]);
 Title = 10;
 max_plate_height = base_boundaries[2];
 max_plate_height = 3;
+Standard = 5;
 
 
 braille_radius = 1;
@@ -29,6 +29,7 @@ texturing=.3;
 
 function scale_object(x) = (x)/15;
 
+//X,Y,Z,Flux
 star =
 [
 	[1.4,31.4,3,1063.653075],
@@ -315,43 +316,16 @@ filaments=[
 ];
 
 
-module triangle (s,h) {
-//r=(s/2)/sin(60);
-r = s;
-	linear_extrude(height = h){
-		polygon(points=[[-sin(60)*r,-sin(30)*r],[sin(60)*r,-sin(30)*r],[0,r]],triangle=[[0,1,2]]);
-	}
-}
 
-Standard = 5;
+
 //X-cord,Y-cord,Layer,Intensity
-
 module star(Standard,Intensity,loc,pointiness,fragments){
-Intensity2=Intensity;
 	translate([loc[0],loc[1],0]){
 		scale([1,1,1]){
-			color("Purple")cylinder(r1=Standard/2,r2=pointiness,h=Intensity2,$fn=fragments);
+			color("Purple")cylinder(r1=Standard/2,r2=pointiness,h=Intensity,$fn=fragments);
 		}
 	}
 }
-
-//module star(Standard,Intensity,loc){
-//Intensity2=Intensity;
-//	translate([loc[0],loc[1],0]){
-//		scale([1,1,1]){
-//			intersection(){
-//				resize([Standard/2,Standard/2,Intensity2*2]){
-//					color("Purple")sphere(r1=Standard/2,r2=Standard/2,h=Intensity2,$fn=fn);
-//				}
-//				translate([-Standard/2,-Standard/2,0]){
-//					resize([Standard,Standard,]){
-//						cube(Intensity2*2);
-//					}
-//				}
-//			}
-//		}
-//	}
-//}
 
 module object(type,Standard,x,y,z){
 	if(type==0){
@@ -369,10 +343,6 @@ module object(type,Standard,x,y,z){
 }
 
 module drawing(i){
-k=2;
-K=120/2/k;
-h=3;
-H=120/2/h;
 	if(i==1){
 		scale(scaling/.95){
 			translate([0,move2,base_boundaries[2]/2]){
@@ -423,36 +393,6 @@ H=120/2/h;
 			translate([0,17.687,base_boundaries[2]/2]){
 				scale(inkscale){
 					color("Blue")linear_extrude(file = "v6_NGC_602.dxf", height = (Emboss*2)/inkscale-texturing, layer = "Gas_Dust");
-				}
-			}
-		}
-	}
-}
-module test(x,y,z){
-	if(x==1){
-		scale(scaling/.95){
-			translate([0,move,base_boundaries[2]/2/scaling]){
-				scale(inkscale){
-					color("Red")linear_extrude(file = "v6_NGC_602.dxf", height =(Emboss)/inkscale/.95, layer = "Gasses_t");
-				}
-			}
-		}
-	}
-	if(y==1){
-		scale(scaling/.95){
-			translate([0,17.687,base_boundaries[2]/2/scaling]){
-				scale(inkscale){
-					color("Blue")linear_extrude(file = "v6_NGC_602.dxf", height = (Emboss*2)/inkscale, layer = "Gas_Dust_t");
-				}
-			}
-		}
-	}
-
-	if(z==1){
-		scale(scaling/.95){
-			translate([0,move,base_boundaries[2]/2/scaling]){
-				scale(inkscale){
-					color("green")linear_extrude(file = "v6_NGC_602.dxf", height = (Emboss*3)/inkscale/.95, layer = "Dust_t");
 				}
 			}
 		}
@@ -721,10 +661,7 @@ module plate4(type){
 
 
 module assembly(i,type){
-//	%cube(base_boundaries);
-
 	base();
-
 	translate([0,0,(base_boundaries[2]+i)]){
 		plate4(type);
 	}
@@ -737,8 +674,6 @@ module assembly(i,type){
 	translate([0,0,(base_boundaries[2]+i)*4]){
 		plate1(type);
 	}
-
-
 }
 
 module assembly2(j,type){
@@ -798,24 +733,14 @@ module assembly3(j){
 	}
 }
 
-//test(1,1,1);
-
-//cube(.1);
-
-//assembly(45,0);
+assembly(45,0);
 
 //assembly2(10,1);
 
 //assembly3(10,1);
 
-rotate([0,0,90]){
-	translate([-base_boundaries[0]/2,-base_boundaries[1]/2,0]){
-		plate4(1);
-	}
-}
-
-//drawing(4);
-
-//pattern(X,Y,pat,x,y,shape,side,h);
-//pattern(100,120,0,0,1,2,1,1);
-//pattern(10,12,0,1,1,0,1,1);
+//rotate([0,0,90]){
+//	translate([-base_boundaries[0]/2,-base_boundaries[1]/2,0]){
+//		plate4(1);
+//	}
+//}
