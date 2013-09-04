@@ -17,9 +17,9 @@ spacing = 2.5;
 distance = 3.75 + spacing;
 Emboss = 2;
 
-scaling = (.95);
-transX = (2);
-transY = (2);
+scaling = (.85);
+transX = (7);
+transY = (7);
 transY_draw = (-18);
 
 move = 17.687;
@@ -322,7 +322,7 @@ filaments=[
 module star(Standard,Intensity,loc,pointiness,fragments){
 	translate([loc[0],loc[1],0]){
 		scale([1,1,1]){
-			color("Purple")cylinder(r1=Standard/2,r2=pointiness,h=Intensity,$fn=fragments);
+			color("Purple")cylinder(r1=Intensity*2,r2=pointiness,h=Intensity*4,$fn=fragments);
 		}
 	}
 }
@@ -442,7 +442,7 @@ module bits(I){
 				}
 				for(i=[0:49]){
 					if(star[i][2]==3){
-						star(Standard,log(star[i][3])*5,star[i],1,30);
+						star(Standard,log(star[i][3]),star[i],1,30);
 					}
 				}
 			}
@@ -463,7 +463,7 @@ module bits(I){
 				}
 				for(i=[0:49]){
 					if(star[i][2]==4){
-						star(Standard,log(star[i][3])*5,star[i],1,30);
+						star(Standard,log(star[i][3]),star[i],1,30);
 					}
 				}
 			}
@@ -614,7 +614,7 @@ module plate3(type){
 			scale([scaling,scaling,1]){
 				for(i=[0:49]){
 					if(star[i][2]==3){
-						star(Standard,log(star[i][3])*5,star[i],Standard/2,fn);
+						star(Standard,log(star[i][3]),star[i],Standard/2,fn);
 					}
 				}
 			}
@@ -646,7 +646,7 @@ module plate4(type){
 			scale([scaling,scaling,1]){
 				for(i=[0:49]){
 					if(star[i][2]==4){
-						star(Standard,log(star[i][3])*5,star[i],Standard/2,fn);
+						star(Standard,log(star[i][3]),star[i],Standard/2,fn);
 					}
 				}
 			}
@@ -733,14 +733,14 @@ module assembly3(j){
 	}
 }
 
-assembly(45,0);
+//assembly(45,0);
 
 //assembly2(10,1);
 
 //assembly3(10,1);
 
-//rotate([0,0,90]){
-//	translate([-base_boundaries[0]/2,-base_boundaries[1]/2,0]){
-//		plate4(1);
-//	}
-//}
+rotate([0,0,90]){
+	translate([-base_boundaries[0]/2,-base_boundaries[1]/2,0]){
+		plate1(0);
+	}
+}
